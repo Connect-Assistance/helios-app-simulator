@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "helios-app-simulator",
+  "version": "1.0.0",
+  "author": {
+    "email": "hello@jonathanagosto.com",
+    "name": "Jonathan L. Agosto Cruz",
+    "url": "https://github.com/jonathanagosto"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/",
+    "start": "ts-node --transpile-only src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@types/socket.io-client": "^1.4.34",
+    "dotenv": "^8.2.0",
+    "isomorphic-unfetch": "^3.1.0",
+    "socket.io-client": "^2.3.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.7",
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^14.11.2",
+    "ts-node-dev": "^1.0.0-pre.63"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
+  }
+}

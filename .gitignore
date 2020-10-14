@@ -1,0 +1,8 @@
+src/data/*.json
+node_modules
+
+.env*
+
+# Whitelisting individual files
+!.env.example
+!src/data/__example__.json

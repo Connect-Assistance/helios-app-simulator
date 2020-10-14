@@ -1,0 +1,18 @@
+{
+    "login": {
+        "email": "test@email.com",
+        "password": "password"
+    },
+    "location": {
+        "activeService": "",
+        "bearing": 90,
+        "distance": -1,
+        "eta": -1,
+        "latitude": 18.4505653779,
+        "longitude": -66.0706400871,
+        "newServices": [],
+        "pendingService": {},
+        "tripStatus": "",
+        "vehicleType": "vial"
+    }
+}
