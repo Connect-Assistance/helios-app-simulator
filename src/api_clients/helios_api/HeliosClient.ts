@@ -3,8 +3,7 @@ import fetch from "isomorphic-unfetch";
 import { connect as openSocket } from "socket.io-client";
 import {
   ILoginRequest,
-  ILoginResponse,
-  ILoginTokenResponse,
+  ILoginResponse
 } from "./interfaces/ILogin";
 import { IBaseResponse } from "./interfaces/IBaseResponse";
 import { IVehicleTypeRequest } from "./interfaces/IVehicleType";
@@ -14,7 +13,7 @@ import { ParsedVehicleTypes } from "../../interfaces/IDriverLocation";
 export class HeliosClient {
   private driverFromJson: IJSONDriver | undefined;
   private driver: ILoginResponse | undefined;
-  private ws = openSocket("ws://localhost:3000/driver", {
+  private ws = openSocket(`${HELIOS_API_WS_URL}/driver`, {
     autoConnect: false,
     forceNew: true,
     transports: ["websocket"],
@@ -85,11 +84,15 @@ export class HeliosClient {
 
       await this.setVehicleType();
 
-      this.ws.emit('add_driver', this.driver?.user._id, this.driver?.user.email);
+      this.ws.emit(
+        "add_driver",
+        this.driver?.user._id,
+        this.driver?.user.email
+      );
 
-      this.ws.emit('driver_status', {
+      this.ws.emit("driver_status", {
         driverId: this.driver?.user.providerId,
-        status: 'Active'
+        status: "Active",
       });
 
       setInterval(() => {
@@ -103,7 +106,8 @@ export class HeliosClient {
           ? JSON.stringify(this.driverFromJson?.location.newServices)
           : undefined;
 
-        this.ws.emit('location',
+        this.ws.emit(
+          "location",
           this.driverFromJson?.location.latitude,
           this.driverFromJson?.location.longitude,
           this.driverFromJson?.location.bearing,
@@ -115,9 +119,7 @@ export class HeliosClient {
           activeService,
           pendingService,
           undefined, // TODO: Find out what parameter 'services' really means.
-          this.driverFromJson?.location.newServices && this.driverFromJson.location.newServices?.length > 0
-            ? JSON.stringify(this.driverFromJson?.location.newServices)
-            : undefined
+          newServices
         );
       }, 10000);
     });
