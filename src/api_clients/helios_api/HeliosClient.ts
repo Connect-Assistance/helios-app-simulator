@@ -9,6 +9,7 @@ import { IBaseResponse } from "./interfaces/IBaseResponse";
 import { IVehicleTypeRequest } from "./interfaces/IVehicleType";
 import { IJSONDriver } from "../../interfaces/IJsonDriver";
 import { ParsedVehicleTypes } from "../../interfaces/IDriverLocation";
+import { ILiveLocationRequest, ILiveLocationResponse } from "./interfaces/ILiveLocation";
 
 export class HeliosClient {
   private driverFromJson: IJSONDriver | undefined;
@@ -36,6 +37,38 @@ export class HeliosClient {
 
     this.driverFromJson = driver;
     this.driver = json.data;
+  }
+
+  async sendLocation() {
+    const d = (this.driverFromJson as IJSONDriver).location;
+    const body: ILiveLocationRequest = {
+      bearing: d.bearing,
+      distance: d.distance,
+      eta: d.eta,
+      latitude: d.latitude,
+      longitude: d.longitude,
+      services: {
+        active: d.activeService,
+        new: d.newServices,
+        pending: d.pendingService
+      },
+      tripStatus: d.tripStatus,
+      vehicleType: d.vehicleType,
+    };
+    const response = await fetch(`${HELIOS_API_URL}/api/v1/drivers/${this.driver?.user._id}/location`, {
+      method: "post",
+      body: JSON.stringify(body),
+      headers: {
+        "Authorization": this.driver?.token.token,
+        "Content-Type": "application/json"
+      },
+    });
+    const json: IBaseResponse<ILiveLocationResponse> = await response.json();
+    if (!json.status) {
+      console.log(json);
+      throw Error(`HeliosClient - Location not emitted for <${this.driver?.user.email} | ${this.driver?.user._id}>`);
+    }
+    console.log(`HeliosClient - Location emitted for <${this.driver?.user.email} | ${this.driver?.user._id}> at ${new Date().toISOString()}`)
   }
 
   async setVehicleType() {
@@ -95,33 +128,8 @@ export class HeliosClient {
         status: "Active",
       });
 
-      setInterval(() => {
-        const activeService = this.driverFromJson?.location.activeService
-          ? JSON.stringify(this.driverFromJson?.location.activeService)
-          : undefined;
-        const pendingService = this.driverFromJson?.location.pendingService
-          ? JSON.stringify(this.driverFromJson?.location.pendingService)
-          : undefined;
-        const newServices = this.driverFromJson?.location.newServices.length
-          ? JSON.stringify(this.driverFromJson?.location.newServices)
-          : undefined;
-
-        this.ws.emit(
-          "location",
-          this.driverFromJson?.location.latitude,
-          this.driverFromJson?.location.longitude,
-          this.driverFromJson?.location.bearing,
-          this.driver?.user.providerId,
-          this.driverFromJson?.location.vehicleType,
-          this.driverFromJson?.location.eta,
-          this.driverFromJson?.location.distance,
-          this.driverFromJson?.location.tripStatus,
-          activeService,
-          pendingService,
-          undefined, // TODO: Find out what parameter 'services' really means.
-          newServices
-        );
-      }, 10000);
+      this.sendLocation();
+      setInterval(() => this.sendLocation(), 60 * 1000);
     });
   }
 }

@@ -18,14 +18,8 @@ export interface IJSONDriverLocation {
     eta: number;
     latitude: number;
     longitude: number;
-    newServices: IJSONDriverServiceData[];
-    pendingService: IJSONDriverServiceData;
+    newServices: string[];
+    pendingService: string;
     tripStatus: string; // TODO: Convert this to a typed type
     vehicleType: string;
-}
-
-export interface IJSONDriverServiceData {
-	_id: string;
-	sfIdAccount: string;
-	situation: string;
 }

@@ -4,15 +4,15 @@
         "password": "password"
     },
     "location": {
-        "activeService": "",
+        "activeService": null,
         "bearing": 90,
-        "distance": -1,
-        "eta": -1,
+        "distance": null,
+        "eta": null,
         "latitude": 18.4505653779,
         "longitude": -66.0706400871,
-        "newServices": [],
-        "pendingService": {},
-        "tripStatus": "",
+        "newServices": null,
+        "pendingService": null,
+        "tripStatus": null,
         "vehicleType": "vial"
     }
 }
