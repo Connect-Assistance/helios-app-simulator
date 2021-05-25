@@ -1,5 +1,6 @@
 export interface ILiveLocationRequest {
   bearing: number;
+  branch: string;
   distance?: number;
   eta?: number;
   latitude: number;

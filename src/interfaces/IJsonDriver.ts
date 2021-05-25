@@ -1,5 +1,3 @@
-import { ParsedVehicleTypes } from "./IDriverLocation";
-
 export interface IJSONDriver {
     login: IJSONDriverLogin;
     location: IJSONDriverLocation;
@@ -13,6 +11,7 @@ export interface IJSONDriverLogin {
 export interface IJSONDriverLocation {
     activeService: string;
     bearing: number;
+    branch: string;
     distance: number;
     driverId: string;
     eta: number;

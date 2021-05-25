@@ -43,6 +43,7 @@ export class HeliosClient {
     const d = (this.driverFromJson as IJSONDriver).location;
     const body: ILiveLocationRequest = {
       bearing: d.bearing,
+      branch: d.branch,
       distance: d.distance,
       eta: d.eta,
       latitude: d.latitude,

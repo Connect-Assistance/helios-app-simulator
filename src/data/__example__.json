@@ -4,15 +4,16 @@
         "password": "password"
     },
     "location": {
-        "activeService": null,
+        "activeService": null, // string (serviceId) | null
         "bearing": 90,
+        "branch": "Puerto Rico",
         "distance": null,
         "eta": null,
         "latitude": 18.4505653779,
         "longitude": -66.0706400871,
-        "newServices": null,
-        "pendingService": null,
-        "tripStatus": null,
+        "newServices": null, // string[] (serviceIds) | null
+        "pendingService": null, // string (serviceId) | null
+        "tripStatus": null, // string (serviceId) | null
         "vehicleType": "vial"
     }
 }
