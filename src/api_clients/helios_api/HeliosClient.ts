@@ -1,15 +1,15 @@
 import { HELIOS_API_URL, HELIOS_API_WS_URL } from "../../configuration";
 import fetch from "isomorphic-unfetch";
 import { connect as openSocket } from "socket.io-client";
-import {
-  ILoginRequest,
-  ILoginResponse
-} from "./interfaces/ILogin";
+import { ILoginRequest, ILoginResponse } from "./interfaces/ILogin";
 import { IBaseResponse } from "./interfaces/IBaseResponse";
 import { IVehicleTypeRequest } from "./interfaces/IVehicleType";
 import { IJSONDriver } from "../../interfaces/IJsonDriver";
 import { ParsedVehicleTypes } from "../../interfaces/IDriverLocation";
-import { ILiveLocationRequest, ILiveLocationResponse } from "./interfaces/ILiveLocation";
+import {
+  ILiveLocationRequest,
+  ILiveLocationResponse,
+} from "./interfaces/ILiveLocation";
 
 export class HeliosClient {
   private driverFromJson: IJSONDriver | undefined;
@@ -51,25 +51,34 @@ export class HeliosClient {
       services: {
         active: d.activeService,
         new: d.newServices,
-        pending: d.pendingService
+        pending: d.pendingService,
       },
       tripStatus: d.tripStatus,
       vehicleType: d.vehicleType,
     };
-    const response = await fetch(`${HELIOS_API_URL}/api/v1/drivers/${this.driver?.user._id}/location`, {
-      method: "post",
-      body: JSON.stringify(body),
-      headers: {
-        "Authorization": this.driver?.token.token,
-        "Content-Type": "application/json"
-      },
-    });
+    const response = await fetch(
+      `${HELIOS_API_URL}/api/v1/drivers/${this.driver?.user._id}/location`,
+      {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {
+          Authorization: this.driver?.token.token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const json: IBaseResponse<ILiveLocationResponse> = await response.json();
     if (!json.status) {
       console.log(json);
-      throw Error(`HeliosClient - Location not emitted for <${this.driver?.user.email} | ${this.driver?.user._id}>`);
+      throw Error(
+        `HeliosClient - Location not emitted for <${this.driver?.user.email} | ${this.driver?.user._id}>`
+      );
     }
-    console.log(`HeliosClient - Location emitted for <${this.driver?.user.email} | ${this.driver?.user._id}> at ${new Date().toISOString()}`)
+    console.log(
+      `HeliosClient - Location emitted for <${this.driver?.user.email} | ${
+        this.driver?.user._id
+      }> at ${new Date().toISOString()}`
+    );
   }
 
   async setVehicleType() {
